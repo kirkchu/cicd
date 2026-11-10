@@ -6,5 +6,5 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo hello
-        run: echo hello
+      - name: Echo current time
+        run: echo "$(date)"
