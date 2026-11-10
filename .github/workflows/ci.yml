@@ -2,8 +2,6 @@ name: CI
 
 on:
   push:
-  schedule:
-    - cron: '*/5 * * * *'
 
 jobs:
   hello:
@@ -12,3 +10,18 @@ jobs:
     steps:
       - name: Echo current time
         run: echo "$(date)"
+      - name: Create remote directory
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.MYNX }}
+          SSH_KNOWN_HOSTS: ${{ vars.PROD_SSH_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/id_ed25519 \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -p 2221 \
+            ckk@www.chainhao.com.tw \
+            'mkdir -p "$HOME/tmp/cicd"'
