@@ -8,6 +8,8 @@ jobs:
     name: Echo current time
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Echo current time
         run: echo "$(date)"
       - name: Create remote directory
@@ -25,3 +27,11 @@ jobs:
             -p 2221 \
             ckk@www.chainhao.com.tw \
             'mkdir -p "$HOME/tmp/cicd"'
+      - name: Copy hello.txt to remote
+        run: |
+          scp -i ~/.ssh/id_ed25519 \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -P 2221 \
+            hello.txt \
+            ckk@www.chainhao.com.tw:~/tmp/cicd/hello.txt
