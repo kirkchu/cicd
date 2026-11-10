@@ -4,6 +4,7 @@ on: push
 
 jobs:
   hello:
+    name: Echo current time
     runs-on: ubuntu-latest
     steps:
       - name: Echo current time
