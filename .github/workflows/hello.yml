@@ -7,5 +7,18 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
       - name: Say hello
         run: echo hello
+
+      - name: Check hello.txt character count
+        run: |
+          export LC_ALL=C.UTF-8
+          count=$(tr -d '\r\n' < hello.txt | wc -m)
+          echo "hello.txt contains $count characters (excluding line breaks)."
+          if [ "$count" -gt 20 ]; then
+            echo "hello.txt exceeds the 20-character limit." >&2
+            exit 1
+          fi
